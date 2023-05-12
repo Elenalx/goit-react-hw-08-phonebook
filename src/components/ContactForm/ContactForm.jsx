@@ -1,35 +1,35 @@
-import { toast } from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import css from './ContactForm.module.css';
-import { addContact } from 'redux/operations';
-import { getContacts } from 'redux/selectors';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-hot-toast';
+import css from './ContactForm.module.css'
+import { getContacts } from 'redux/contacts/selectors';
+import { addContact } from 'redux/contacts/operations';
+import ReactInputMask from 'react-input-mask';
 
 export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
-
 
   const reset = () => {
     setName('');
     setNumber('');
   };
 
-  const handleNameChange = evt => {
+  const handleChangeName = evt => {
     setName(evt.target.value);
   };
 
-  const handleNumberChange = evt => {
+  const handleChangeNumber = evt => {
     setNumber(evt.target.value);
   };
 
+  //===== add contact to state =====
+
   const dispatch = useDispatch();
-  
+
   const contactAdd = {
     name: name,
-    phone: number,
+    number: number,
   };
 
   const contactsStore = useSelector(getContacts);
@@ -39,7 +39,6 @@ export const ContactForm = () => {
       toast.error(`${name} is already in contacts.`);
       return;
     }
-
 
     dispatch(addContact(contactAdd));
   };
@@ -51,39 +50,40 @@ export const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={css.form}>
+    <form className={css.form} onSubmit={handleSubmit}>
       <label className={css.text}>
         Name
+        <input
+          className={css.input}
+          value={name}
+          onChange={handleChangeName}
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+        />
       </label>
-      <input
-        type="text"
-        name="name"
-        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-        required
-        value={name}
-        onChange={handleNameChange}
-        className={css.input}
-      />
 
       <label className={css.text}>
         Number
+        <ReactInputMask
+          mask="+399 (99) 999-99-99"
+          // maskChar=" "
+          className={css.input}
+          value={number}
+          onChange={handleChangeNumber}
+          type="tel"
+          name="number"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+        />
       </label>
-      <input
-        type="tel"
-        name="number"
-        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-        required
-        value={number}
-        onChange={handleNumberChange}
-        className={css.input}
-      />
 
-      <button type="submit" className={css.btn}>
+      <button className={css.btn} type="submit">
         Add contact
       </button>
     </form>
   );
 };
-

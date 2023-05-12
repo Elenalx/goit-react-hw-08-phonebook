@@ -1,20 +1,17 @@
-import css from './ContactItem.module.css';
+import css from './ContactItem.module.css'
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/operations';
+import { deleteContact } from 'redux/contacts/operations';
 import {
   getContacts,
   getError,
   getFilterContacts,
   getIsLoading,
-} from 'redux/selectors';
+} from 'redux/contacts/selectors';
 import { RotatingLines } from 'react-loader-spinner';
-
 
 export const ContactItem = () => {
   const contacts = useSelector(getContacts);
   const contactsFilter = useSelector(getFilterContacts);
-
-  const dispatch = useDispatch();
 
   const getVisibleContacts = () => {
     const normalizedFilter = contactsFilter.toLowerCase();
@@ -23,15 +20,27 @@ export const ContactItem = () => {
     );
   };
   const renderContacts = getVisibleContacts();
+
+  const dispatch = useDispatch();
+
   const isLoading = useSelector(getIsLoading);
   const error = useSelector(getError);
-
   return (
     <>
-      {renderContacts.map(({ id, name, phone }) => (
+      {renderContacts.map(({ id, name, number }) => (
         <li className={css.item} key={id}>
-         <p className={(css.text, css.name)}>{name}:</p>
-          <p className={css.text}>{phone}</p>
+          <p className={(css.text, css.name)}>{name}:</p>
+          <p className={css.text}>{number}</p>
+
+          {/* <button
+            className={css.btn}
+            type="button"
+            disabled={isLoading}
+            onClick={() => dispatch(editContact(id))}
+          >
+            {isLoading && !error && <RotatingLines width="12" />}Edit
+          </button> */}
+
           <button
             className={css.btn}
             type="button"

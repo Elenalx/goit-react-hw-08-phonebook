@@ -1,7 +1,7 @@
-import { ContactForm } from 'components/contactForm/ContactForm';
-import { ContactItem } from 'components/contactItem/ContactItem';
-import { ContactList } from 'components/contactList/ContactList';
-import { Filter } from 'components/filter/Filter';
+import { ContactForm } from 'components/ContactForm/ContactForm';
+import { ContactItem } from 'components/ContactItem/ContactItems';
+import { ContactList } from 'components/ContactList/ContactList';
+import { Filter } from 'components/Filter/Filter';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
